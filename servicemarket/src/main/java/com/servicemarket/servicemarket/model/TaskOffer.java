@@ -1,5 +1,7 @@
 package com.servicemarket.servicemarket.model;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,5 +15,5 @@ import lombok.experimental.SuperBuilder;
 @ToString
 public class TaskOffer extends Task {
 
-    private String offeredBy;
+    private LocalDateTime expiryDate;
 }

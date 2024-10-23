@@ -15,7 +15,6 @@ import lombok.experimental.SuperBuilder;
 @ToString
 public class TaskRequest extends Task {
     
-    private String requestedBy;
     private String location;
     private LocalDateTime deadline;
 }

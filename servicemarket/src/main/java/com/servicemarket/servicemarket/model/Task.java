@@ -27,7 +27,7 @@ public abstract class Task {
 
     @Id
     private String id;
-
+    private String createdBy;
     private String title;
     private String description;
     private BigDecimal price;
