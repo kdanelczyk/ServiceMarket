@@ -2,8 +2,7 @@ package com.servicemarket.servicemarket.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -33,8 +32,8 @@ public abstract class Task {
     private BigDecimal price;
     private LocalDateTime createdAt;
 
-    private Set<byte[]> images = new HashSet<>();
+    private List<byte[]> images;
 
     @DBRef
-    private Set<Category> categories = new HashSet<>();
+    private List<Category> categories;
 }
