@@ -20,10 +20,9 @@ public interface TaskService {
 
     public Task getTaskById(String id);
 
-    // public void getInfoAboutIfLoggedIn(String id);
+    public void getInfoAboutIfLoggedIn(String id);
 
-    // public void getInfoAboutIfNotLoggedIn(String id, String nameOfTheQuestioner,
-    // String emailOfTheQuestioner);
+    public void getInfoAboutIfNotLoggedIn(String id, String nameOfTheQuestioner, String emailOfTheQuestioner);
 
     public Task createTaskRequest(TaskRequestInput taskRequestInput, String categoryId);
 

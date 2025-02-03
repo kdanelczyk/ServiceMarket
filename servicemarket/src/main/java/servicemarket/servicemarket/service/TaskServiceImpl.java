@@ -1,7 +1,9 @@
 package servicemarket.servicemarket.service;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,7 @@ import servicemarket.servicemarket.model.InputDto.TaskOfferInput;
 import servicemarket.servicemarket.model.InputDto.TaskRequestInput;
 import servicemarket.servicemarket.model.mapper.TaskOfferMapper;
 import servicemarket.servicemarket.model.mapper.TaskRequestMapper;
+import servicemarket.servicemarket.rabbitmq.RabbitMQProducer;
 import servicemarket.servicemarket.repository.TaskRepository;
 
 @Service
@@ -36,6 +39,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private TaskRequestMapper taskRequestMapper;
+
+    @Autowired
+    private RabbitMQProducer rabbitMQProducer;
 
     @Autowired
     private ImagesConverter imagesConverter;
@@ -84,6 +90,27 @@ public class TaskServiceImpl implements TaskService {
     public Task getTaskById(String id) {
         return taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
+    }
+
+    @Override
+    public void getInfoAboutIfLoggedIn(String id) {
+        Map<String, Object> senderData = new HashMap<>();
+        Task task = taskRepository.findById(id).get();
+        senderData.put("nameOfTheQuestioner", SecurityContextHolder.getContext().getAuthentication().getName());
+        senderData.put("offerOwner", task.getCreatedBy());
+        senderData.put("taskTitle", task.getTitle());
+        rabbitMQProducer.sendRequest(senderData);
+    }
+
+    @Override
+    public void getInfoAboutIfNotLoggedIn(String id, String nameOfTheQuestioner, String emailOfTheQuestioner) {
+        Map<String, Object> senderData = new HashMap<>();
+        Task task = taskRepository.findById(id).get();
+        senderData.put("nameOfTheQuestioner", nameOfTheQuestioner);
+        senderData.put("emailOfTheQuestioner", emailOfTheQuestioner);
+        senderData.put("offerOwner", task.getCreatedBy());
+        senderData.put("taskTitle", task.getTitle());
+        rabbitMQProducer.sendRequest(senderData);
     }
 
     @Override
