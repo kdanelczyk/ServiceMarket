@@ -1,9 +1,9 @@
 import React from "react";
-import PaginatedList from "../components/PaginatedList";
-import Card from "../components/ui/Card";
-import { useUsers } from "../hooks/useUsers";
+import Card from "../../components/ui/Card";
+import PaginatedList from "../../components/ui/PaginatedList";
+import { useUsers } from "../../hooks/useUsers";
 
-const UserListPage = () => {
+const UserList = () => {
     const { fetchUsers } = useUsers();
 
     return (
@@ -24,4 +24,4 @@ const UserListPage = () => {
     );
 };
 
-export default UserListPage;
+export default UserList;

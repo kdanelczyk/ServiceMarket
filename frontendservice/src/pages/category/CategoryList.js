@@ -1,7 +1,7 @@
 import React from "react";
-import PaginatedList from "../components/PaginatedList";
-import Card from "../components/ui/Card";
-import { useCategories } from "../hooks/useCategories";
+import Card from "../../components/ui/Card";
+import PaginatedList from "../../components/ui/PaginatedList";
+import { useCategories } from "../../hooks/useCategories";
 
 const CategoryList = () => {
     const { fetchCategories } = useCategories();

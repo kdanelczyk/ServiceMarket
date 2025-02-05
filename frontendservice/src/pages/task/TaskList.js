@@ -1,10 +1,10 @@
 import React from "react";
-import PaginatedList from "../components/PaginatedList";
-import Card from "../components/ui/Card";
-import { useTasks } from "../hooks/useTasks";
+import Card from "../../components/ui/Card";
+import PaginatedList from "../../components/ui/PaginatedList";
+import { useTaskOffersByCategory } from "../../hooks/useTaskOffersByCategory";
 
 const TaskList = () => {
-    const { fetchTasks } = useTasks();
+    const { fetchTasks } = useTaskOffersByCategory();
 
     return (
         <PaginatedList
