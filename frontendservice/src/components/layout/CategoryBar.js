@@ -1,13 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCategories } from "../../hooks/useCategories";
+import { getCategories } from "../../services/api"; // Importuj funkcję fetchującą
 import StyledButton from "../ui/StyledButton";
 
 const CategoryBar = () => {
-    const { categories, loading, error } = useCategories();
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [typeSelectionVisible, setTypeSelectionVisible] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await getCategories(0, 32); // Pobierz wszystkie kategorie (duża liczba)
+                setCategories(response.data.content || []);
+            } catch (err) {
+                setError(err?.response?.data?.message || "Error fetching categories");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
     const handleCategoryClick = (categoryId) => {
         setSelectedCategory(categoryId);
@@ -26,13 +43,8 @@ const CategoryBar = () => {
         setSelectedCategory(null);
     };
 
-    if (loading) {
-        return <div>Loading categories...</div>;
-    }
-
-    if (error) {
-        return <div style={{ color: "red" }}>Error: {error}</div>;
-    }
+    if (loading) return <div>Loading categories...</div>;
+    if (error) return <div style={{ color: "red" }}>Error: {error}</div>;
 
     return (
         <>
@@ -92,7 +104,7 @@ const styles = {
         display: "flex",
         justifyContent: "center",
         gap: "3px",
-        zIndex: 1000,
+        zIndex: 999,
     },
     categoryWrapper: {
         display: "flex",

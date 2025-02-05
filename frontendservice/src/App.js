@@ -7,6 +7,7 @@ import Footer from './components/layout/Footer';
 import Header from './components/layout/Header';
 import Login from './pages/authorization/Login';
 import Signup from './pages/authorization/Signup';
+import CategoryForm from './pages/category/CategoryForm';
 import CategoryList from './pages/category/CategoryList';
 import TaskList from './pages/task/TaskList';
 import UserList from './pages/user/UserList';
@@ -21,6 +22,7 @@ function App() {
         <ContentBox>
           <Routes>
             <Route path="/categories/page" element={<CategoryList />} exact />
+            <Route path="/categories/edit/:id" element={<CategoryForm />} exact />
 
             <Route path="/tasks/offers/page" element={<TaskList />} exact />
             <Route path="/tasks/requests/page" element={<TaskList />} exact />

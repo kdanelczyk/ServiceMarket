@@ -22,7 +22,7 @@ const styles = {
         bottom: '0',
         width: '100%',
         boxShadow: '0 -2px 6px rgba(0, 0, 0, 0.5)',
-        zIndex: 1000,
+        zIndex: 999,
     },
     text: {
         margin: '0',
