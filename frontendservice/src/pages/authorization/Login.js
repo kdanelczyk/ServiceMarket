@@ -5,40 +5,25 @@ import { useAuth } from "../../hooks/useAuth";
 
 const Login = () => {
     const { login } = useAuth();
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [credentials, setCredentials] = useState({ username: "", password: "" });
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        const success = await login({ username, password });
-        if (success) {
-            window.location.href = "/users/me";
-        } else {
-            alert("Invalid login credentials. Please try again.");
-        }
+    const handleChange = (e) => {
+        setCredentials({ ...credentials, [e.target.name]: e.target.value });
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const success = await login(credentials);
+        if (!success) alert("Invalid login credentials. Please try again.");
+    };
+
+    const fields = [
+        { key: "username", label: "Username", type: "text", onChange: handleChange, required: true, minLength: 3, maxLength: 20 },
+        { key: "password", label: "Password", type: "password", onChange: handleChange, required: true, minLength: 6 },
+    ];
+
     return (
-        <StyledForm title="Login" onSubmit={handleLogin}>
-            <input
-                type="text"
-                placeholder="Enter your username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                minLength={3}
-                maxLength={20}
-            />
-
-            <input
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-            />
-
+        <StyledForm title="Login" fields={fields} onSubmit={handleSubmit}>
             <StyledButton type="submit">Login</StyledButton>
         </StyledForm>
     );

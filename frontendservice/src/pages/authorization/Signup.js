@@ -5,15 +5,21 @@ import { useAuth } from "../../hooks/useAuth";
 
 const Signup = () => {
     const { signup } = useAuth();
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [phone, setPhone] = useState("");
-    const [city, setCity] = useState("");
+    const [formData, setFormData] = useState({
+        username: "",
+        email: "",
+        password: "",
+        phone: "",
+        city: "",
+    });
 
-    const handleSignup = async (e) => {
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const success = await signup({ username, password, email, phone, city });
+        const success = await signup(formData);
         if (success) {
             alert("Registration successful! You can now log in.");
             window.location.href = "/auth/login";
@@ -22,48 +28,16 @@ const Signup = () => {
         }
     };
 
+    const fields = [
+        { key: "username", label: "Username", type: "text", onChange: handleChange, required: true, minLength: 3, maxLength: 20 },
+        { key: "password", label: "Password", type: "password", onChange: handleChange, required: true, minLength: 6 },
+        { key: "email", label: "Email", type: "email", onChange: handleChange, required: true },
+        { key: "phone", label: "Phone", type: "text", onChange: handleChange, pattern: "\\+?[0-9]{7,15}", required: true },
+        { key: "city", label: "City", type: "text", onChange: handleChange, required: true, maxLength: 50 },
+    ];
+
     return (
-        <StyledForm title="Sign Up" onSubmit={handleSignup}>
-            <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                minLength={3}
-                maxLength={20}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-            />
-            <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-            />
-            <input
-                type="text"
-                placeholder="Phone (e.g., +48123456789)"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                pattern="\+?[0-9]{7,15}"
-                required
-            />
-            <input
-                type="text"
-                placeholder="City"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                required
-                maxLength={50}
-            />
+        <StyledForm title="Sign Up" fields={fields} onSubmit={handleSubmit}>
             <StyledButton type="submit">Sign Up</StyledButton>
         </StyledForm>
     );
