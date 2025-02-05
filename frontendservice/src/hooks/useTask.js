@@ -23,7 +23,7 @@ export const useTask = (id) => {
                     setImages(base64Images);
                 }
             } catch (err) {
-                setError(err);
+                setError(err.message || 'Error fetching task');
             } finally {
                 setLoading(false);
             }

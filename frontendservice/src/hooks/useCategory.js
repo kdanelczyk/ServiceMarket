@@ -16,7 +16,7 @@ export const useCategory = (categoryId) => {
                 const response = await getCategoryById(categoryId, token);
                 setCategory(response.data);
             } catch (err) {
-                setError(err);
+                setError(err.message || 'Error fetching category');
             } finally {
                 setLoading(false);
             }

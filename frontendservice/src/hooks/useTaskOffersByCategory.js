@@ -15,7 +15,7 @@ export const useTaskOffersByCategory = (categoryId, page = 0, size = 10) => {
                 const response = await getTaskOffersByCategory(categoryId, page, size);
                 setTasks(response.data.content);
             } catch (err) {
-                setError(err);
+                setError(err.message || 'Error fetching tasks');
             } finally {
                 setLoading(false);
             }

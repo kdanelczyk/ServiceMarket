@@ -12,7 +12,8 @@ export const useCategories = (page = 0, size = 16) => {
                 const response = await getCategories(page, size);
                 setCategories(response.data.content);
             } catch (err) {
-                setError(err);
+                setError(err?.response?.data?.message || 'Error fetching categories');
+                console.error(err);
             } finally {
                 setLoading(false);
             }
