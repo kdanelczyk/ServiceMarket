@@ -26,12 +26,12 @@ export const useUsers = () => {
                 const response = await getAllUsers(token, page, size);
                 if (response.data) {
                     setUsers(response.data.content);
+                    return response.data;
                 } else {
                     setUsers([]);
                 }
             } catch (err) {
                 setError(err?.message || 'Error fetching users');
-                console.error(err);
             } finally {
                 setLoading(false);
             }

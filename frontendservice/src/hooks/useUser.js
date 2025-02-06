@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { getUserById, updateUser as updateUserApi } from '../services/api';
-import { useAuth } from './useAuth'; // Adjust the path as needed
 
 export const useUser = (userId = null) => {
     const [user, setUser] = useState(null);
@@ -8,7 +7,7 @@ export const useUser = (userId = null) => {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
     const token = localStorage.getItem('token');
-    const { logout } = useAuth();
+
 
     useEffect(() => {
         if (!userId) return;
@@ -20,6 +19,7 @@ export const useUser = (userId = null) => {
                 const response = await getUserById(userId, token);
                 setUser(response.data);
                 setSuccess(false);
+                return response.data;
             } catch (err) {
                 setError(err.message || 'Error fetching user');
             } finally {
@@ -35,12 +35,17 @@ export const useUser = (userId = null) => {
         setError(null);
         try {
             const response = await updateUserApi(userId, userData, token);
-            if (response.status === 200) {
+            if (response === "User successfully logged out") {
                 setSuccess(true);
-                setUser(response.data);
+                return response;
+            } else {
+                setSuccess(false);
+                return null;
             }
         } catch (err) {
             setError(err.message || 'Error updating user');
+            setSuccess(false);
+            return null;
         } finally {
             setLoading(false);
         }

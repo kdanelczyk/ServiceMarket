@@ -1,137 +1,142 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import StyledButton from '../../components/ui/StyledButton';
 import StyledForm from '../../components/ui/StyledForm';
-import { useTaskOffer } from '../../hooks/useTaskOffer'; // Importowanie hooka
+import useTaskOffer from '../../hooks/useTaskOffer';
 
 const TaskOfferForm = () => {
-    const { id } = useParams(); // Pobieramy ID zadania z URL
+    const { id } = useParams();
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { taskOffer, loading, error, success, createOffer, updateOffer } = useTaskOffer(id); // Hook useTaskOffer
+    const {
+        taskOffer,
+        setTaskOffer,
+        loading,
+        error,
+        success,
+        createTask,
+        updateTask
+    } = useTaskOffer(id, location.pathname);
 
-    const [images, setImages] = useState([]);
-    const [taskData, setTaskData] = useState({
-        title: '',
-        description: '',
-        price: '',
-        expiryDate: '',
-        images: [],
-    });
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    useEffect(() => {
-        if (id && location.pathname.includes('edit')) {
-            setTaskData(taskOffer || {}); // Jeżeli edytujemy, ładujemy dane zadania
+        if (!taskOffer.title || !taskOffer.description || !taskOffer.price || !taskOffer.expiryDate) {
+            alert("Please fill in all required fields.");
+            return;
         }
-    }, [taskOffer, id, location]);
+
+        try {
+            const formData = new FormData();
+            formData.append('title', taskOffer.title);
+            formData.append('description', taskOffer.description);
+            formData.append('price', taskOffer.price);
+            formData.append('expiryDate', taskOffer.expiryDate);
+
+            if (taskOffer.images.length > 0) {
+                taskOffer.images.forEach((image) => {
+                    formData.append('images', image);
+                });
+            }
+
+            let response;
+
+            if (location.pathname.includes('new')) {
+                const categoryId = location.pathname.split('/').pop();
+                response = await createTask(categoryId, formData);
+            } else if (location.pathname.includes('edit')) {
+                response = await updateTask(id, formData);
+            }
+
+            if (response && Object.keys(response).length > 0) {
+                alert('Task Offer saved successfully!');
+                const taskId = response.id;
+                navigate(`/tasks/offer/${taskId}`);
+            } else {
+                alert('Failed to save task offer');
+            }
+        } catch (error) {
+            alert('Failed to save task offer!');
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setTaskData((prevData) => ({
-            ...prevData,
-            [name]: value,
+        setTaskOffer((prevTaskOffer) => ({
+            ...prevTaskOffer,
+            [name]: value
         }));
     };
 
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files);
-        setImages(files);
-        setTaskData((prevData) => ({
-            ...prevData,
-            images: files,
+        setTaskOffer((prevTaskOffer) => ({
+            ...prevTaskOffer,
+            images: files
         }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const { title, description, price, expiryDate, images } = taskData;
-
-        if (!title || !description || !price || !expiryDate) {
-            alert("Please fill in all required fields.");
-            return;
+    const fields = [
+        {
+            key: 'title',
+            label: 'Task Title',
+            type: 'text',
+            value: taskOffer.title,
+            onChange: handleChange,
+            required: true,
+            minLength: 3,
+            maxLength: 100,
+            placeholder: 'Task Title'
+        },
+        {
+            key: 'description',
+            label: 'Task Description',
+            type: 'textarea',
+            value: taskOffer.description,
+            onChange: handleChange,
+            required: true,
+            minLength: 10,
+            placeholder: 'Task Description'
+        },
+        {
+            key: 'price',
+            label: 'Price',
+            type: 'number',
+            value: taskOffer.price,
+            onChange: handleChange,
+            required: true,
+            min: 0,
+            placeholder: 'Price'
+        },
+        {
+            key: 'expiryDate',
+            label: 'Expiry Date',
+            type: 'datetime-local',
+            value: taskOffer.expiryDate,
+            onChange: handleChange,
+            required: true
+        },
+        {
+            key: 'images',
+            label: 'Images',
+            type: 'file',
+            onChange: handleImageChange,
+            accept: 'image/*',
+            multiple: true,
+            required: true
         }
-
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('price', price);
-        formData.append('expiryDate', expiryDate);
-
-        images.forEach((image) => {
-            formData.append('images', image);
-        });
-
-        try {
-            if (id) {
-                // Jeśli istnieje ID, wykonujemy aktualizację oferty
-                await updateOffer(id, formData);
-            } else {
-                // Jeśli ID nie ma, tworzymy nową ofertę
-                await createOffer('categoryId', formData); // 'categoryId' można pobrać z URL, jeśli to konieczne
-            }
-
-            if (success) {
-                alert('Task offer saved successfully!');
-                navigate(`/tasks/offers/${taskOffer.id}`);
-            }
-        } catch (err) {
-            console.error('Error:', err);
-            alert('Failed to save task offer');
-        }
-    };
+    ];
 
     return (
-        <StyledForm title={id ? "Edit Task Offer" : "Create Task Offer"} onSubmit={handleSubmit}>
-            {loading && <p>Loading...</p>}
+        <StyledForm
+            title={id ? "Edit Task Offer" : "Create Task Offer"}
+            fields={fields}
+            onSubmit={handleSubmit}
+        >
+            {loading && <p>Loading task details...</p>}
             {error && <p style={{ color: 'red' }}>{error}</p>}
-
-            <input
-                type="text"
-                name="title"
-                value={taskData.title}
-                onChange={handleChange}
-                required
-                placeholder="Task Title"
-            />
-
-            <textarea
-                name="description"
-                value={taskData.description}
-                onChange={handleChange}
-                required
-                placeholder="Task Description"
-            />
-
-            <input
-                type="number"
-                name="price"
-                value={taskData.price}
-                onChange={handleChange}
-                required
-                placeholder="Price"
-            />
-
-            <input
-                type="datetime-local"
-                name="expiryDate"
-                value={taskData.expiryDate}
-                onChange={handleChange}
-                required
-            />
-
-            <input
-                type="file"
-                name="images"
-                accept="image/*"
-                multiple
-                onChange={handleImageChange}
-            />
-
-            <StyledButton type="submit">
-                {id ? "Save Changes" : "Create Task Offer"}
-            </StyledButton>
+            <StyledButton type="submit">{id ? "Save Changes" : "Create Task Offer"}</StyledButton>
         </StyledForm>
     );
 };

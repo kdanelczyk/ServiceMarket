@@ -1,39 +1,66 @@
-import { useState } from 'react';
-import {
-    createTaskRequest,
-    updateTaskRequest
-} from '../services/api';
+import { useEffect, useState } from 'react';
+import { createTaskRequest as apiCreateTask, updateTaskRequest as apiUpdateTask, getTaskById } from '../services/api'; // Importujemy metody z API
 
-export const useTaskRequest = (taskRequestId = null) => {
-    const [taskRequest, setTaskRequest] = useState(null);
+const useTaskRequest = (id, pathname) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(false);
     const token = localStorage.getItem('token');
+    const [taskRequest, setTaskRequest] = useState({
+        title: '',
+        description: '',
+        price: '',
+        location: '',
+        deadline: '',
+        images: []
+    });
 
-    const createRequest = async (categoryId, taskRequestInput) => {
+    useEffect(() => {
+        if (!id) return;
+
+        const fetchTask = async () => {
+            if (!pathname.includes('edit')) return;
+            setLoading(true);
+            setError(null);
+            try {
+                const response = await getTaskById(id);
+                setTaskRequest(response.data);
+            } catch (err) {
+                setError(err.message || 'Error fetching task request');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchTask();
+    }, [id, pathname, token]);
+
+    const createTask = async (categoryId, formData) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await createTaskRequest(categoryId, taskRequestInput, token);
-            setTaskRequest(response.data);
-            setSuccess(true);
+            const response = await apiCreateTask(categoryId, formData, token);
+            if (response.status === 201) {
+                setTaskRequest(response.data);
+                return response.data;
+            }
         } catch (err) {
-            setError(err.message || 'Error creating task request');
+            setError(err.message || 'Error fetching task request');
         } finally {
             setLoading(false);
         }
     };
 
-    const updateRequest = async (id, taskRequestInput) => {
+    const updateTask = async (taskId, formData) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await updateTaskRequest(id, taskRequestInput, token);
-            setTaskRequest(response.data);
-            setSuccess(true);
+            const response = await apiUpdateTask(taskId, formData, token);
+            if (response.status === 200) {
+                setTaskRequest(response.data);
+                return response.data;
+            }
         } catch (err) {
-            setError(err.message || 'Error updating task request');
+            setError(err.message || 'Error fetching task request');
         } finally {
             setLoading(false);
         }
@@ -41,10 +68,12 @@ export const useTaskRequest = (taskRequestId = null) => {
 
     return {
         taskRequest,
+        setTaskRequest,
         loading,
         error,
-        success,
-        createRequest,
-        updateRequest,
+        createTask,
+        updateTask
     };
 };
+
+export default useTaskRequest;

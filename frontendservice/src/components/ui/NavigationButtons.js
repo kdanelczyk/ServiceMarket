@@ -1,20 +1,27 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getUserRole } from '../../utils/auth'; // Importuj metody do dekodowania tokenu
 import StyledButton from './StyledButton';
 
-const NavigationButtons = ({ isLoggedIn, userRole, onLogout, onCreateTask }) => {
+const NavigationButtons = ({ isLoggedIn, onLogout, onCreateTask }) => {
     const navigate = useNavigate();
+    const token = localStorage.getItem('token'); // Pobieranie tokenu z localStorage
+    const userRole = getUserRole(token); // Pobierz rolę użytkownika z tokenu
 
     return (
         <div style={styles.buttonContainer}>
             {isLoggedIn ? (
                 <>
-                    {userRole?.includes('ROLE_ADMIN') && (
+                    {/* Sprawdzamy rolę użytkownika */}
+                    {(userRole === 'ROLE_ADMIN' || userRole === 'ROLE_SUPER_ADMIN') && (
                         <>
-                            <StyledButton onClick={() => navigate('/categories/page')}>
+                            <StyledButton onClick={() => navigate('/categories/page?page=0&size=10')}>
                                 Categories
                             </StyledButton>
-                            <StyledButton onClick={() => navigate('/users/page')}>
+                            <StyledButton onClick={() => navigate('/categories/new')}>
+                                Create Category
+                            </StyledButton>
+                            <StyledButton onClick={() => navigate('/users/page?page=0&size=10')}>
                                 Users
                             </StyledButton>
                         </>
@@ -37,6 +44,10 @@ const styles = {
         display: 'flex',
         justifyContent: 'flex-end',
         gap: '15px',
+        padding: '5px 20px', // Dodaje przestrzeń wokół przycisków
+        backgroundColor: '#333', // Kolor tła kontenera
+        borderRadius: '10px', // Zaokrąglone rogi
+        margin: '2px', // Odstęp od innych elementów
     },
 };
 

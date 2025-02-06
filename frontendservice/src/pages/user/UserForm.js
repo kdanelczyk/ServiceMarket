@@ -7,8 +7,6 @@ import { useUser } from "../../hooks/useUser";
 const UserForm = () => {
     const { id: userId } = useParams();
     const navigate = useNavigate();
-
-    // useUser hook fetches the user data and provides the updateUser function.
     const { user, loading, error, success, updateUser } = useUser(userId);
 
     const [formData, setFormData] = useState({
@@ -19,14 +17,12 @@ const UserForm = () => {
         city: "",
     });
 
-    // When the user data is loaded, prefill the form fields.
     useEffect(() => {
         if (user) {
-            console.log("User data fetched:", user);  // Log fetched user data
             setFormData({
                 username: user.username || "",
                 email: user.email || "",
-                password: "", // leave blank for security, let the user enter a new one if needed
+                password: "",
                 phone: user.phone || "",
                 city: user.city || "",
             });
@@ -35,26 +31,19 @@ const UserForm = () => {
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-        console.log(`Changed ${e.target.name}:`, e.target.value);  // Log the field change
     };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Submitting update with data:", formData);  // Log data being submitted
-        await updateUser(userId, formData);
 
-        // Check success and failure
-        console.log("Update success flag:", success);
-        if (success) {
+        const response = await updateUser(userId, formData);
+        if ((response === "User successfully logged out")) {
             alert("User updated successfully!");
-            navigate("/users");
+            localStorage.removeItem("token");
+            navigate("/auth/login");
         } else {
             alert("Update failed. Please check your data and try again.");
         }
     };
-
-    // Debugging log for form data before rendering
-    console.log("Form Data:", formData);
 
     const fields = [
         {

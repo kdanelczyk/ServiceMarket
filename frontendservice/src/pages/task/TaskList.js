@@ -6,7 +6,7 @@ import {
     getTaskOffers,
     getTaskOffersByCategory,
     getTaskRequests,
-    getTaskRequestsByCategory
+    getTaskRequestsByCategory,
 } from "../../services/api";
 
 const TaskList = () => {
@@ -19,7 +19,16 @@ const TaskList = () => {
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(10);
 
-    const categoryId = new URLSearchParams(location.search).get("categoryId");
+    let categoryId = new URLSearchParams(location.search).get("categoryId");
+
+    if (!categoryId) {
+        const segments = location.pathname.split("/");
+        const categoryIndex = segments.findIndex((seg) => seg === "category");
+        if (categoryIndex > -1 && segments.length > categoryIndex + 1) {
+            categoryId = segments[categoryIndex + 1];
+        }
+    }
+
     const urlPath = location.pathname;
 
     useEffect(() => {
@@ -48,7 +57,6 @@ const TaskList = () => {
                 }
             } catch (err) {
                 setError(err?.message || "Error fetching tasks");
-                console.error(err);
             } finally {
                 setLoading(false);
             }
@@ -57,8 +65,12 @@ const TaskList = () => {
         fetchData();
     }, [urlPath, categoryId, page, size]);
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
 
     return (
         <div>
@@ -66,19 +78,25 @@ const TaskList = () => {
                 data={tasks}
                 totalPages={totalPages}
                 pageSize={size}
-                onPageChange={(newPage) => navigate(`?page=${newPage}&size=${size}`)}
-                onSizeChange={(newSize) => navigate(`?page=0&size=${newSize}`)}
-                renderItem={(task) => (
-                    <Card
-                        key={task.id}
-                        item={task}
-                        attributesToShow={[
-                            { key: "title", label: "Title" },
-                            { key: "description", label: "Description" },
-                        ]}
-                        link={`/tasks/${task.id}`}
-                    />
-                )}
+                onPageChange={(newPage) => {
+                    navigate(`?page=${newPage}&size=${size}`);
+                }}
+                onSizeChange={(newSize) => {
+                    navigate(`?page=0&size=${newSize}`);
+                }}
+                renderItem={(task) => {
+                    return (
+                        <Card
+                            key={task.id}
+                            item={task}
+                            attributesToShow={[
+                                { key: "title", label: "Title" },
+                                { key: "description", label: "Description" },
+                            ]}
+                            link={`/tasks/${task.id}`}
+                        />
+                    );
+                }}
             />
         </div>
     );

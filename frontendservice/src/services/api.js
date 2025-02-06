@@ -74,6 +74,7 @@ export const createTaskOffer = (categoryId, taskOfferInput, token) =>
 export const updateTaskRequest = (id, taskRequestInput, token) =>
     axios.put(`${API_URL_MARKET}/tasks/requests/${id}`, taskRequestInput, {
         headers: { Authorization: `Bearer ${token}` }
+
     });
 
 export const updateTaskOffer = (id, taskOfferInput, token) =>

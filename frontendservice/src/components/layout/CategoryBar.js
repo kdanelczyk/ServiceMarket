@@ -93,8 +93,8 @@ const CategoryBar = () => {
 
 const styles = {
     categoryBar: {
-        position: "fixed",
-        top: "60px",
+        position: "absolute",  // Zmieniamy na absolute, by nie nakładało się na header
+        top: "60px",  // Wartość top ustalamy, aby CategoryBar zaczynało się tuż poniżej headera
         left: 0,
         width: "100%",
         backgroundColor: "#1a1a1a",
@@ -104,7 +104,7 @@ const styles = {
         display: "flex",
         justifyContent: "center",
         gap: "3px",
-        zIndex: 999,
+        zIndex: 998,  // Ustalamy niższy zIndex niż header, by nie zasłaniał go
     },
     categoryWrapper: {
         display: "flex",

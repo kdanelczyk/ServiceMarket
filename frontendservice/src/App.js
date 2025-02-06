@@ -30,10 +30,12 @@ function App() {
 
             <Route path="/tasks/offers/page" element={<TaskList />} exact />
             <Route path="/tasks/requests/page" element={<TaskList />} exact />
-            <Route path="/tasks/offers/category/:categoryId" element={<TaskOfferForm />} exact />
-            <Route path="/tasks/requests/category/:categoryId" element={<TaskRequestForm />} exact />
-            <Route path="/tasks/offers/:taskId" element={<TaskOfferForm />} exact />
-            <Route path="/tasks/requests/:taskId" element={<TaskRequestForm />} exact />
+            <Route path="/tasks/offers/category/:categoryId/page" element={<TaskList />} exact />
+            <Route path="/tasks/requests/category/:categoryId/page" element={<TaskList />} exact />
+            <Route path="/tasks/requests/new/:categoryId" element={<TaskRequestForm />} />
+            <Route path="/tasks/requests/edit/:id" element={<TaskRequestForm />} />
+            <Route path="/tasks/offers/new/:categoryId" element={<TaskOfferForm />} />
+            <Route path="/tasks/offers/edit/:id" element={<TaskOfferForm />} />
 
             <Route path="/auth/login" element={<Login />} exact />
             <Route path="/auth/signup" element={<Signup />} exact />

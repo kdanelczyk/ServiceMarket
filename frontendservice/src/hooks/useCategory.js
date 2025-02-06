@@ -17,7 +17,8 @@ export const useCategory = (categoryId = null) => {
             try {
                 const response = await getCategoryById(categoryId, token);
                 setCategory(response.data);
-                setSuccess(false);
+                setSuccess(true);
+                return response.data;
             } catch (err) {
                 setError(err.message || 'Error fetching category');
             } finally {
@@ -33,9 +34,10 @@ export const useCategory = (categoryId = null) => {
         setError(null);
         try {
             const response = await createCategoryApi(categoryData, token);
-            if (response.status === 201) {
+            if (response.status === 200) {
                 setSuccess(true);
                 setCategory(response.data);
+                return response.data;
             }
         } catch (err) {
             setError(err.message || 'Error creating category');
@@ -52,6 +54,7 @@ export const useCategory = (categoryId = null) => {
             if (response.status === 200) {
                 setSuccess(true);
                 setCategory(response.data);
+                return response.data;
             }
         } catch (err) {
             setError(err.message || 'Error updating category');
@@ -68,5 +71,4 @@ export const useCategory = (categoryId = null) => {
         createCategory,
         updateCategory,
     };
-
 };

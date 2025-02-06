@@ -6,7 +6,13 @@ const StyledForm = ({ title, fields, onSubmit, children, style }) => {
             {fields?.map(({ key, label, type = "text", ...rest }) => (
                 <div key={key} style={styles.inputWrapper}>
                     <label style={styles.label}>{label}</label>
-                    <input type={type} name={key} style={styles.input} {...rest} />
+                    {type === "textarea" ? (
+                        <textarea name={key} style={{ ...styles.input, ...styles.textarea }} {...rest} />
+                    ) : type === "file" ? (
+                        <input type={type} name={key} style={styles.fileInput} {...rest} />
+                    ) : (
+                        <input type={type} name={key} style={styles.input} {...rest} />
+                    )}
                 </div>
             ))}
 
@@ -45,6 +51,19 @@ const styles = {
         fontSize: "14px",
     },
     input: {
+        padding: "10px",
+        borderRadius: "4px",
+        border: "1px solid #666",
+        backgroundColor: "#444",
+        color: "#fff",
+        fontSize: "16px",
+        outline: "none",
+    },
+    textarea: {
+        height: "100px",
+        resize: "vertical",
+    },
+    fileInput: {
         padding: "10px",
         borderRadius: "4px",
         border: "1px solid #666",
