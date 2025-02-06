@@ -13,7 +13,9 @@ const CategoryForm = () => {
     });
 
     useEffect(() => {
+
         if (category) {
+            console.log(category);
             setFormData({
                 name: category.name
             });
@@ -41,7 +43,7 @@ const CategoryForm = () => {
     }, [success, navigate, id]);
 
     const fields = [
-        { key: 'name', label: 'Category Name', type: 'text', onChange: handleChange, required: true, minLength: 3, maxLength: 50 },
+        { key: 'name', label: 'Category Name', type: 'text', onChange: handleChange, value: formData.name, required: true, minLength: 3, maxLength: 50 },
     ];
 
     return (

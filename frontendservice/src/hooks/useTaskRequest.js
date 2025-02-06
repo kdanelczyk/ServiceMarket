@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { createTaskRequest as apiCreateTask, updateTaskRequest as apiUpdateTask, getTaskById } from '../services/api'; // Importujemy metody z API
+import { createTaskRequest as apiCreateTask, deleteTaskRequest as apiDeleteTask, updateTaskRequest as apiUpdateTask, getTaskById } from '../services/api'; // Dodajemy nową metodę z API} from '../services/api'; // Importujemy metody z API
 
 const useTaskRequest = (id, pathname) => {
     const [loading, setLoading] = useState(false);
@@ -66,13 +66,34 @@ const useTaskRequest = (id, pathname) => {
         }
     };
 
+    const deleteTask = async (taskId) => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await apiDeleteTask(taskId, token);
+            if (response.status === 204) {
+                setSuccess(true);
+                setTaskRequest(null);
+                return true;
+            }
+            return false;
+        } catch (err) {
+            setError(err.message || 'Error deleting task request');
+            return false;
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return {
         taskRequest,
         setTaskRequest,
         loading,
         error,
+        success,
         createTask,
-        updateTask
+        updateTask,
+        deleteTask // Dodajemy metodę do zwracanych wartości
     };
 };
 

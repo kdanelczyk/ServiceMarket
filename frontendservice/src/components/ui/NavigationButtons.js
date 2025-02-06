@@ -18,16 +18,22 @@ const NavigationButtons = ({ isLoggedIn, onLogout, onCreateTask }) => {
                             <StyledButton onClick={() => navigate('/categories/page?page=0&size=10')}>
                                 Categories
                             </StyledButton>
-                            <StyledButton onClick={() => navigate('/categories/new')}>
-                                Create Category
+                            <StyledButton onClick={() => navigate('/tasks/requests/page?page=0&size=10')}>
+                                Requests
+                            </StyledButton>
+                            <StyledButton onClick={() => navigate('/tasks/requests/page?page=0&size=10')}>
+                                Offers
                             </StyledButton>
                             <StyledButton onClick={() => navigate('/users/page?page=0&size=10')}>
                                 Users
                             </StyledButton>
+                            <StyledButton onClick={() => navigate('/categories/new')}>
+                                Create Category
+                            </StyledButton>
                         </>
                     )}
-                    <StyledButton onClick={onLogout}>Logout</StyledButton>
                     <StyledButton onClick={onCreateTask}>Create Task</StyledButton>
+                    <StyledButton onClick={onLogout}>Logout</StyledButton>
                 </>
             ) : (
                 <>
