@@ -1,66 +1,81 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import StyledButton from "../../components/ui/StyledButton";
-import StyledForm from "../../components/ui/StyledForm";
-import { useCategory } from "../../hooks/useCategory";
-import { createCategory, updateCategory } from "../../services/api";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import StyledButton from '../../components/ui/StyledButton';
+import StyledForm from '../../components/ui/StyledForm';
+import { useCategory } from '../../hooks/useCategory';
 
 const CategoryForm = () => {
-    const { id } = useParams();
+    const { id: categoryId } = useParams();
     const navigate = useNavigate();
-    const { category: fetchedCategory, loading, error } = useCategory(id);
-    const [category, setCategory] = useState({ name: "", description: "" });
-    const token = localStorage.getItem("token");
+
+    const {
+        category,
+        loading,
+        error,
+        success,
+        createCategory,
+        updateCategory,
+    } = useCategory(categoryId);
+
+    const [name, setName] = useState('');
 
     useEffect(() => {
-        if (fetchedCategory) {
-            setCategory(fetchedCategory);
+        if (category && category.name) {
+            setName(category.name);
         }
-    }, [fetchedCategory]);
+    }, [category]);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setCategory((prev) => ({ ...prev, [name]: value }));
+        setName(e.target.value);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            if (id) {
-                await updateCategory(id, category, token);
-                alert("Category updated successfully!");
-            } else {
-                await createCategory(category, token);
-                alert("Category created successfully!");
+
+        if (categoryId) {
+            await updateCategory(categoryId, { name });
+            if (success) {
+                alert('Updated!');
+                navigate(`/categories/${categoryId}`);
             }
-            navigate("/categories/page");
-        } catch (err) {
-            console.error("Error saving category:", err);
-            alert("Failed to save category");
+        } else {
+            await createCategory({ name });
+            if (success) {
+                alert('Created!');
+                navigate('/categories/page?page=0&size=10');
+            }
         }
     };
 
-    if (loading) return <p>Loading category...</p>;
-    if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
+    const fields = [
+        {
+            key: "name",
+            label: "Category Name",
+            type: "text",
+            onChange: handleChange,
+            value: name,
+            required: true,
+            minLength: 3,
+            maxLength: 50,
+        },
+    ];
 
     return (
         <StyledForm
-            title={id ? "Edit Category" : "Create Category"}
+            title={categoryId ? "Edit Category" : "Create Category"}
+            fields={fields}
             onSubmit={handleSubmit}
-            fields={[
-                {
-                    key: "name",
-                    label: "Category Name",
-                    type: "text",
-                    value: category.name,
-                    onChange: handleChange,
-                    required: true,
-                    minLength: 3,
-                    maxLength: 50,
-                },
-            ]}
         >
-            <StyledButton type="submit">{id ? "Save Changes" : "Create Category"}</StyledButton>
+            {loading ? (
+                <p>Loading...</p>
+            ) : (
+                <>
+                    {error && <p style={{ color: 'red' }}>{error}</p>}
+                    <StyledButton type="submit">
+                        {categoryId ? "Update" : "Create"}
+                    </StyledButton>
+                </>
+            )}
         </StyledForm>
     );
 };
