@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { createTaskRequest as apiCreateTask, deleteTaskRequest as apiDeleteTask, updateTaskRequest as apiUpdateTask, getTaskById } from '../services/api'; // Dodajemy nową metodę z API} from '../services/api'; // Importujemy metody z API
+import { createTaskRequest as apiCreateTask, deleteTask as apiDeleteTask, updateTaskRequest as apiUpdateTask, getTaskById } from '../services/api'; // Dodajemy nową metodę z API} from '../services/api'; // Importujemy metody z API
 
 const useTaskRequest = (id, pathname) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(false);
     const token = localStorage.getItem('token');
     const [taskRequest, setTaskRequest] = useState({
         title: '',
@@ -18,7 +19,7 @@ const useTaskRequest = (id, pathname) => {
         if (!id) return;
 
         const fetchTask = async () => {
-            if (!pathname.includes('edit')) return;
+            if (pathname.includes('new')) return;
             setLoading(true);
             setError(null);
             try {

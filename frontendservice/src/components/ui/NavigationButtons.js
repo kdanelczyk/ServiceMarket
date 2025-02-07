@@ -21,7 +21,7 @@ const NavigationButtons = ({ isLoggedIn, onLogout, onCreateTask }) => {
                             <StyledButton onClick={() => navigate('/tasks/requests/page?page=0&size=10')}>
                                 Requests
                             </StyledButton>
-                            <StyledButton onClick={() => navigate('/tasks/requests/page?page=0&size=10')}>
+                            <StyledButton onClick={() => navigate('/tasks/offers/page?page=0&size=10')}>
                                 Offers
                             </StyledButton>
                             <StyledButton onClick={() => navigate('/users/page?page=0&size=10')}>

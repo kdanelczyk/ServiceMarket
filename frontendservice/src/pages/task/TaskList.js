@@ -65,6 +65,17 @@ const TaskList = () => {
         fetchData();
     }, [urlPath, categoryId, page, size]);
 
+    // Function to determine the correct detail URL based on the current path
+    const getDetailUrl = (taskId) => {
+        if (urlPath.includes("requests")) {
+            return `/tasks/requests/${taskId}`;
+        } else if (urlPath.includes("offers")) {
+            return `/tasks/offers/${taskId}`;
+        } else {
+            return `/tasks/${taskId}`; // Fallback for unknown paths
+        }
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -93,7 +104,7 @@ const TaskList = () => {
                                 { key: "title", label: "Title" },
                                 { key: "description", label: "Description" },
                             ]}
-                            link={`/tasks/${task.id}`}
+                            link={getDetailUrl(task.id)} // Use the dynamic URL function
                         />
                     );
                 }}

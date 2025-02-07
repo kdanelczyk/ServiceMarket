@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { createTaskOffer as apiCreateTask, updateTaskOffer as apiUpdateTask, getTaskById } from '../services/api'; // Importujemy metody z API
+import { createTaskOffer as apiCreateTask, deleteTask as apiDeleteTask, updateTaskOffer as apiUpdateTask, getTaskById } from '../services/api'; // Importujemy metody z API
 
 const useTaskOffer = (id, pathname) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(false);
     const token = localStorage.getItem('token');
     const [taskOffer, setTaskOffer] = useState({
         title: '',
@@ -18,7 +19,7 @@ const useTaskOffer = (id, pathname) => {
         if (!id) return;
 
         const fetchTask = async () => {
-            if (!pathname.includes('edit')) return;
+            if (pathname.includes('new')) return;
             setLoading(true);
             setError(null);
             try {
@@ -66,13 +67,34 @@ const useTaskOffer = (id, pathname) => {
         }
     };
 
+    const deleteTask = async (taskId) => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await apiDeleteTask(taskId, token);
+            if (response.status === 204) {
+                setSuccess(true);
+                setTaskOffer(null);
+                return true;
+            }
+            return false;
+        } catch (err) {
+            setError(err.message || 'Error deleting task offer');
+            return false;
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return {
         taskOffer,
         setTaskOffer,
         loading,
         error,
+        success,
         createTask,
-        updateTask
+        updateTask,
+        deleteTask
     };
 };
 
