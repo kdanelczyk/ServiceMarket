@@ -1,3 +1,5 @@
+import React from 'react';
+
 const StyledForm = ({ title, fields, onSubmit, children, style }) => {
     return (
         <form onSubmit={onSubmit} style={{ ...styles.form, ...style }}>

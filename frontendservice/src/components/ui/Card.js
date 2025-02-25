@@ -3,7 +3,7 @@ import React from 'react';
 const Card = ({ item, attributesToShow, link }) => {
     return (
         <a
-            href={link} // Link do szczegółów przekazany jako props
+            href={link}
             style={styles.card}
             onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'scale(1.02)';
@@ -14,11 +14,16 @@ const Card = ({ item, attributesToShow, link }) => {
                 e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.2)';
             }}
         >
-            {attributesToShow.map((attr) => (
-                <p key={attr.key} style={styles.details}>
-                    <strong>{attr.label}:</strong> {item[attr.key] || 'Brak'}
-                </p>
-            ))}
+            <div style={styles.detailsContainer}>
+                {attributesToShow.map((attr, index) => (
+                    <React.Fragment key={attr.key}>
+                        {index > 0 && <div style={styles.separator} />}
+                        <div style={styles.details}>
+                            <strong>{attr.label}:</strong> {item[attr.key] || 'Brak'}
+                        </div>
+                    </React.Fragment>
+                ))}
+            </div>
         </a>
     );
 };
@@ -28,17 +33,27 @@ const styles = {
         display: 'block',
         backgroundColor: '#444',
         padding: '15px',
-        borderRadius: '8px',
         marginBottom: '10px',
         color: '#fff',
         textDecoration: 'none',
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
         transition: 'transform 0.2s, box-shadow 0.2s',
     },
+    detailsContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: '10px',
+    },
     details: {
         fontSize: '14px',
-        margin: '5px 0',
+        padding: '5px 0',
     },
+    separator: {
+        height: '20px',
+        width: '1px',
+        backgroundColor: 'white',
+    }
 };
 
 export default Card;

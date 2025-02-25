@@ -50,6 +50,7 @@ const styles = {
         right: 0,
         bottom: 0,
         backgroundColor: 'rgba(0,0,0,0.5)',
+        backdropFilter: 'blur(10px)',
         zIndex: 1000,
         display: 'flex',
         justifyContent: 'center',

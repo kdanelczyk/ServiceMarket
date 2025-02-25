@@ -1,7 +1,13 @@
 import React from 'react';
+import { getUsername, getUserRole } from '../../utils/auth';
 import StyledButton from './StyledButton';
 
-const StyledDetail = ({ title, children, onGoBack, onEdit, onDelete }) => {
+const StyledDetail = ({ title, children, onGoBack, onEdit, onDelete, createdBy }) => {
+    const token = localStorage.getItem('token');
+    const isLoggedIn = Boolean(token);
+    const userRole = getUserRole(token);
+    const username = getUsername(token);
+
     return (
         <div style={styles.container}>
             <h1 style={styles.title}>{title}</h1>
@@ -10,12 +16,18 @@ const StyledDetail = ({ title, children, onGoBack, onEdit, onDelete }) => {
                 <StyledButton onClick={onGoBack} style={styles.button}>
                     Go Back
                 </StyledButton>
-                <StyledButton onClick={onEdit} style={styles.button}>
-                    Edit
-                </StyledButton>
-                <StyledButton onClick={onDelete} style={{ ...styles.button, ...styles.deleteButton }}>
-                    Delete
-                </StyledButton>
+
+                {isLoggedIn && (userRole !== 'ROLE_USER' || username === createdBy) && onEdit && (
+                    <StyledButton onClick={onEdit} style={styles.button}>
+                        Edit
+                    </StyledButton>
+                )}
+
+                {isLoggedIn && (userRole !== 'ROLE_USER' || username === createdBy) && onDelete && (
+                    <StyledButton onClick={onDelete} style={{ ...styles.button, ...styles.deleteButton }}>
+                        Delete
+                    </StyledButton>
+                )}
             </div>
         </div>
     );
@@ -51,7 +63,7 @@ const styles = {
         gap: '15px',
     },
     button: {
-        padding: '12px 24px',
+        padding: '12px 15px',
         borderRadius: '8px',
         border: 'none',
         backgroundColor: '#3a3a3a',

@@ -52,7 +52,7 @@ const TaskOfferForm = () => {
             if (response && Object.keys(response).length > 0) {
                 alert('Task Offer saved successfully!');
                 const taskId = response.id;
-                navigate(`/tasks/offer/${taskId}`);
+                navigate(`/tasks/offers/${taskId}`);
             } else {
                 alert('Failed to save task offer');
             }

@@ -2,11 +2,16 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import StyledDetail from '../../components/ui/StyledDetail';
 import { useUser } from '../../hooks/useUser';
+import { getUsername, getUserRole } from '../../utils/auth';
 
 const UserDetail = () => {
     const { userId } = useParams();
     const navigate = useNavigate();
     const { user, loading, error, deleteUser } = useUser(userId);
+    const isLoggedIn = Boolean(localStorage.getItem('token'));
+    const token = localStorage.getItem('token');
+    const userRole = getUserRole(token);
+    const username = getUsername(token);
 
     const handleEdit = () => {
         navigate(`/users/edit/${userId}`);
@@ -29,8 +34,8 @@ const UserDetail = () => {
         <StyledDetail
             title={`${user.username}`}
             onGoBack={() => navigate('/users/page?page=0&size=16')}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
+            {...(userRole === 'ROLE_SUPER_ADMIN' || username === user.username ? { onEdit: handleEdit } : {})}
+            {...(userRole === 'ROLE_SUPER_ADMIN' || username === user.username ? { onDelete: handleDelete } : {})}
         >
             <div style={styles.detailItem}>
                 <label style={styles.label}>Email:</label>
@@ -46,7 +51,7 @@ const UserDetail = () => {
             </div>
             <div style={styles.detailItem}>
                 <label style={styles.label}>Role:</label>
-                <span style={styles.value}>{user.role?.name}</span> {/* Zakładając, że role to obiekt z polem name */}
+                <span style={styles.value}>{user.role?.name}</span>
             </div>
             <div style={styles.detailItem}>
                 <label style={styles.label}>Created At:</label>
@@ -56,6 +61,7 @@ const UserDetail = () => {
             </div>
         </StyledDetail>
     );
+
 };
 
 const styles = {

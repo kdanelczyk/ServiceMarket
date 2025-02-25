@@ -65,6 +65,7 @@ const FullscreenImageViewer = () => {
                 left: 0,
                 width: '100vw',
                 height: '100vh',
+                backdropFilter: 'blur(10px)',
                 backgroundColor: 'rgba(0, 0, 0, 0.9)',
                 display: 'flex',
                 flexDirection: 'column',
