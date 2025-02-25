@@ -1,0 +1,109 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - servicemarket_network
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - servicemarket_network
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: userservice
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - servicemarket_network
+
+  sender-service:
+    build:
+      context: ./senderservice
+      dockerfile: src/docker/Dockerfile
+    container_name: sender-service
+    depends_on:
+      - rabbitmq
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+    networks:
+      - servicemarket_network
+
+  service-market:
+    build:
+      context: ./servicemarket
+      dockerfile: src/docker/Dockerfile
+    container_name: service-market
+    depends_on:
+      - mongodb
+      - rabbitmq
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/service-market
+      SPRING_RABBITMQ_HOST: rabbitmq
+    networks:
+      - servicemarket_network
+
+  user-service:
+    build:
+      context: ./userservice
+      dockerfile: src/docker/Dockerfile
+    container_name: user-service
+    depends_on:
+      - postgres
+      - rabbitmq
+    ports:
+      - "8085:8085"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/userservice
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_RABBITMQ_HOST: rabbitmq
+    networks:
+      - servicemarket_network
+
+  frontend-service:
+    build:
+      context: ./frontendservice
+      dockerfile: Dockerfile
+    container_name: frontend-service
+    depends_on:
+      - sender-service
+      - service-market
+      - user-service
+    ports:
+      - "3000:3000"
+    networks:
+      - servicemarket_network
+
+volumes:
+  mongodb_data:
+  postgres_data:
+
+
+networks:
+  servicemarket_network:
+    driver: bridge
