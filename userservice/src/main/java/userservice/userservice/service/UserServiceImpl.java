@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
             Optional<User> requestingUserOpt = userRepository
                     .findByUsername(senderData.get("nameOfTheQuestioner").toString());
             if (requestingUserOpt.isPresent()) {
-                senderData.put("requestingUserEmail", requestingUserOpt.get().getEmail());
+                senderData.put("emailOfTheQuestioner", requestingUserOpt.get().getEmail());
             } else {
                 throw new RuntimeException("User " + senderData.get("nameOfTheQuestioner") + " not found!");
             }

@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ImageSlider from '../../components/ui/ImageSlider';
 import StyledDetail from '../../components/ui/StyledDetail';
+import TaskInfoButton from '../../components/ui/TaskInfoButton';
 import useTaskRequest from '../../hooks/useTaskRequest';
+
 const TaskRequestDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -41,6 +43,7 @@ const TaskRequestDetail = () => {
             onGoBack={handleGoBack}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            createdBy={taskRequest.createdBy}
         >
             <p>{taskRequest.description}</p>
             <p><strong>Location:</strong> {taskRequest.location}</p>
@@ -53,8 +56,8 @@ const TaskRequestDetail = () => {
             <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', fontSize: '0.85em', color: 'gray' }}>
                 <p><strong>Price:</strong> ${taskRequest.price}</p>
                 <p><strong>Deadline:</strong> {new Date(taskRequest.deadline).toLocaleDateString()}</p>
-                <br></br>
             </div>
+            <TaskInfoButton taskId={id} style={{ marginTop: '20px', textAlign: 'center' }} />
         </StyledDetail>
     );
 };

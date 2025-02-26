@@ -43,7 +43,7 @@ const TaskOfferDetail = () => {
             onGoBack={handleGoBack}
             onEdit={handleEdit}
             onDelete={handleDelete}
-            createdBy={taskOffer.createdBy} // Przekazujemy createdBy do StyledDetail
+            createdBy={taskOffer.createdBy}
         >
             <p>{taskOffer.description}</p>
             {images.length > 0 ? (
