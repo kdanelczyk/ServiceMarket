@@ -35,6 +35,7 @@ public class SecurityConfig {
                                                                 "/tasks/offers/page",
                                                                 "/tasks/requests/page",
                                                                 "/tasks/requests/category/*/page",
+                                                                "/tasks/info/notLoggedIn/**",
                                                                 "/tasks/offers/category/*/page",
                                                                 "/tasks/image/*/*",
                                                                 "/tasks/*")

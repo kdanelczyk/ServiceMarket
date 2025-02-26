@@ -18,7 +18,7 @@ public class EmailSenderImpl implements EmailSender {
 
         System.out.println("Preparing email to offer owner with senderData: " + senderData);
 
-        message.setTo((String) senderData.get("requestingUserEmail"));
+        message.setTo((String) senderData.get("emailOfTheQuestioner"));
         message.setSubject("ServiceMarket - " + senderData.get("taskTitle"));
         message.setText("Dear " + senderData.get("nameOfTheQuestioner") +
                 ",\n\nWe have included the data you asked for below:\n" +
@@ -27,7 +27,7 @@ public class EmailSenderImpl implements EmailSender {
                 "Or telephone number: " + senderData.get("offerOwnerNumber").toString() + "\n\n" +
                 " Thank you for trust!");
 
-        System.out.println("Sending email to: " + senderData.get("requestingUserEmail"));
+        System.out.println("Sending email to: " + senderData.get("emailOfTheQuestioner"));
 
         javaMailSender.send(message);
         System.out.println("Email sent to offer owner.");

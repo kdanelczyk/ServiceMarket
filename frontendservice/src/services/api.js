@@ -59,7 +59,9 @@ export const getInfoAboutTaskIfLoggedIn = (id, token) =>
     });
 
 export const getInfoAboutTaskIfNotLoggedIn = (id, name, email) =>
-    axios.get(`${API_URL_MARKET}/tasks/info/notloggedIn/${id}`, name, email);
+    axios.get(`${API_URL_MARKET}/tasks/info/notLoggedIn/${id}`, {
+        params: { name, email }
+    });
 
 export const createTaskRequest = (categoryId, taskRequestInput, token) =>
     axios.post(`${API_URL_MARKET}/tasks/requests/category/${categoryId}`, taskRequestInput, {

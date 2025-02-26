@@ -81,13 +81,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map<String, Object> getUsersData(Map<String, Object> senderData) {
         System.out.println("Original Sender Data: " + senderData);
+
         if (!senderData.containsKey("emailOfTheQuestioner")) {
-            User requestingUser = userRepository.findByUsername(senderData.get("nameOfTheQuestioner").toString()).get();
-            senderData.put("requestingUserEmail", requestingUser.getEmail());
+            Optional<User> requestingUserOpt = userRepository
+                    .findByUsername(senderData.get("nameOfTheQuestioner").toString());
+            if (requestingUserOpt.isPresent()) {
+                senderData.put("requestingUserEmail", requestingUserOpt.get().getEmail());
+            } else {
+                throw new RuntimeException("User " + senderData.get("nameOfTheQuestioner") + " not found!");
+            }
         }
-        User offerOwner = userRepository.findByUsername(senderData.get("offerOwner").toString()).get();
-        senderData.put("offerOwnerEmail", offerOwner.getEmail());
-        senderData.put("offerOwnerNumber", offerOwner.getPhone());
+
+        Optional<User> offerOwnerOpt = userRepository.findByUsername(senderData.get("offerOwner").toString());
+        if (offerOwnerOpt.isPresent()) {
+            User offerOwner = offerOwnerOpt.get();
+            senderData.put("offerOwnerEmail", offerOwner.getEmail());
+            senderData.put("offerOwnerNumber", offerOwner.getPhone());
+        } else {
+            throw new RuntimeException("Offer owner " + senderData.get("offerOwner") + " not found!");
+        }
+
         System.out.println("After adding offer owner data: " + senderData);
         return senderData;
     }

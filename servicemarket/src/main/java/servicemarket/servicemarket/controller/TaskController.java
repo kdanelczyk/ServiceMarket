@@ -85,11 +85,10 @@ public class TaskController {
     }
 
     @GetMapping("/info/notLoggedIn/{id}")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<Task> getInfoAbout(
             @PathVariable String id,
-            @PathVariable String name,
-            @PathVariable String email) {
+            @RequestParam String name,
+            @RequestParam String email) {
         taskService.getInfoAboutIfNotLoggedIn(id, name, email);
         return ResponseEntity.ok(taskService.getTaskById(id));
     }
