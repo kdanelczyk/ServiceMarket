@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-market
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-market
+  template:
+    metadata:
+      labels:
+        app: service-market
+    spec:
+      containers:
+        - name: service-market
+          image:  gcr.io/acoustic-atom-452113-j8/servicemarket:v1
+          imagePullPolicy: Always
+          env:
+            - name: SPRING_RABBITMQ_HOST
+              value: "rabbitmq"
+            - name: SPRING_DATA_MONGODB_URI
+              value: "mongodb://mongodb:27017/db"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-market
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: service-market

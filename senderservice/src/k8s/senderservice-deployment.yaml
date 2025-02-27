@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sender-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sender-service
+  template:
+    metadata:
+      labels:
+        app: sender-service
+    spec:
+      containers:
+        - name: sender-service
+          image: gcr.io/acoustic-atom-452113-j8/senderservice:v1
+          imagePullPolicy: Always
+          env:
+            - name: SPRING_RABBITMQ_HOST
+              value: "rabbitmq"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sender-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8082
+      targetPort: 8082
+  selector:
+    app: sender-service
