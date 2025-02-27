@@ -1,4 +1,5 @@
 # ServiceMarket
+![7](https://github.com/user-attachments/assets/3480f432-438b-4275-8078-01d1634a7430)
 
 ServiceMarket is a platform designed to facilitate the trade of one-time services across various industries. The service allows users to list their offerings or request services within specific categories. Registered users can both submit offers and respond to service requests. The platform enables users to interact with a tasks created by themselves, using various services built as microservices. 
 
@@ -99,6 +100,19 @@ Authentication and authorization are critical for ensuring that only registered 
   
 - **Frontend**: React.js
 - **Email Sending**: JavaMail (for sending email notifications via `SenderService`)
+
+### **Screenshoots**
+In the photo we see a logged in user checking the details of the offer:
+![1](https://github.com/user-attachments/assets/2d346263-c6de-4791-9da0-6254e2136e8a)
+
+List of tasks:
+![2](https://github.com/user-attachments/assets/6c1c340d-15d4-430a-aa39-b48e857107ca)
+
+Login panel:
+![6](https://github.com/user-attachments/assets/15b40fb7-a85e-4ef8-a04b-96d23c178a55)
+
+Selecting the category and type of task when creating it:
+![3](https://github.com/user-attachments/assets/391b32bb-d1c7-460a-a45a-0b94661d0fea)
 
 ## Running the Project Locally
 
