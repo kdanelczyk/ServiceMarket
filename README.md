@@ -166,17 +166,33 @@ This will:
 - Set up RabbitMQ, MongoDB, and PostgreSQL
 - Connect all services in a shared network
 
-## Deployment in Kubernetes
+## Deployment in Kubernetes (GKE)
 
 The project includes **Kubernetes deployment configurations** in the `kubernetes/` directory. These configurations ensure scalable and manageable deployment in a Kubernetes cluster.
 
-### **Deployment YAML files**
+First log in to gcloud:
+
+```bash
+gcloud init
+```
+After logging in and going through the configuration, we need to create docker images according to the gcr.io convention:
+
+```bash
+docker build -t gcr.io/{name of project in GKE}/{service name}:v1 -f src/docker/Dockerfile .
+```
+
+Now you need to push image:
+
+```bash
+docker push gcr.io/{name of project in GKE}/{service name}:v1
+```
+
 Each microservice has:
 - A `{service name}-deployment.yaml` file to define how the service is deployed and to expose the service within the Kubernetes cluster.
 Example deployment command for `ServiceMarket`:
 
 ```bash
-kubectl apply -f kubernetes/{service name}/{service name}-deployment.yaml
+kubectl apply -f {service name}-deployment.yaml
 ```
 
 ## Conclusion
