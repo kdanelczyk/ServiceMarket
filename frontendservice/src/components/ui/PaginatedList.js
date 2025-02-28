@@ -36,8 +36,8 @@ const PaginatedList = ({
             <List dataSource={data} renderItem={renderItem} />
 
             <div style={styles.buttonContainer}>
-                <StyledButton onClick={() => handleSizeChange(16)}>Pokaż 16</StyledButton>
-                <StyledButton onClick={() => handleSizeChange(64)}>Pokaż 64</StyledButton>
+                <StyledButton onClick={() => handleSizeChange(16)}>Show 16</StyledButton>
+                <StyledButton onClick={() => handleSizeChange(64)}>Show 64</StyledButton>
             </div>
 
             {/* Pagination Controls */}

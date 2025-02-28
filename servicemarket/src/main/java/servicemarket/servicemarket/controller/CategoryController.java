@@ -23,7 +23,8 @@ import servicemarket.servicemarket.service.CategoryService;
 
 @RestController
 @RequestMapping("/categories")
-@CrossOrigin(origins = { "http://localhost:80", "http://frontend-service:80", "http://frontend-service:3000" })
+@CrossOrigin(origins = { "http://localhost:80", "http://frontendservice:80", "http://frontendservice:3000",
+        "http://frontendservice:30000" })
 public class CategoryController {
 
     @Autowired

@@ -22,7 +22,8 @@ import userservice.userservice.service.AuthenticationService;
 
 @RequestMapping("/auth")
 @RestController
-@CrossOrigin(origins = { "http://localhost:80", "http://frontend-service:80", "http://localhost:3000" })
+@CrossOrigin(origins = { "http://localhost:80", "http://frontend-service:80", "http://localhost:3000",
+        "http://frontendservice:30000" })
 public class AuthenticationController {
 
     @Autowired

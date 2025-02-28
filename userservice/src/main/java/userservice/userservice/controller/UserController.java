@@ -20,7 +20,8 @@ import userservice.userservice.service.UserService;
 
 @RequestMapping("/users")
 @RestController
-@CrossOrigin(origins = { "http://localhost:80", "http://frontend-service:80", "http://localhost:3000" })
+@CrossOrigin(origins = { "http://localhost:80", "http://frontend-service:80", "http://localhost:3000",
+        "http://frontendservice:30000" })
 public class UserController {
 
     @Autowired

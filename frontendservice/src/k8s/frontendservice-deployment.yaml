@@ -1,20 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-service
+  name: frontendservice
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: frontend-service
+      app: frontendservice
   template:
     metadata:
       labels:
-        app: frontend-service
+        app: frontendservice
     spec:
       containers:
-        - name: frontend-service
+        - name: frontendservice
           image: gcr.io/acoustic-atom-452113-j8/frontendservice:v1
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "1"
+              memory: "2Gi"
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
@@ -22,7 +29,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-service
+  name: frontendservice
 spec:
   type: NodePort
   ports:
@@ -30,4 +37,4 @@ spec:
       targetPort: 3000
       nodePort: 30000
   selector:
-    app: frontend-service
+    app: frontendservice

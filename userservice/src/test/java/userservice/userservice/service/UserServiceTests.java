@@ -3,7 +3,9 @@ package userservice.userservice.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -167,28 +169,25 @@ class UserServiceTests {
         assertEquals("testuser", result);
     }
 
-    /*
-     * @Test
-     * void testGetUsersData() {
-     * // Given
-     * Map<String, Object> senderData = new HashMap<>();
-     * senderData.put("nameOfTheQuestioner", "testuser");
-     * senderData.put("offerOwner", "testowner");
-     * 
-     * when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(user))
-     * ;
-     * when(userRepository.findByUsername("testowner")).thenReturn(Optional.of(user)
-     * );
-     * 
-     * // When
-     * Map<String, Object> result = userService.getUsersData(senderData);
-     * 
-     * // Then
-     * assertNotNull(result);
-     * assertTrue(result.containsKey("requestingUserEmail"));
-     * assertTrue(result.containsKey("offerOwnerEmail"));
-     * }
-     */
+    @Test
+    void testGetUsersData() {
+        // Given
+        Map<String, Object> senderData = new HashMap<>();
+        senderData.put("nameOfTheQuestioner", "testuser");
+        senderData.put("offerOwner", "testowner");
+
+        when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(user));
+        when(userRepository.findByUsername("testowner")).thenReturn(Optional.of(user));
+
+        // When
+        Map<String, Object> result = userService.getUsersData(senderData);
+
+        // Then
+        assertNotNull(result);
+        assertTrue(result.containsKey("emailOfTheQuestioner"));
+        assertTrue(result.containsKey("offerOwnerEmail"));
+    }
+
     @Test
     void testDeleteUserById() {
         // Given

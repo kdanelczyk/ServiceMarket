@@ -11,6 +11,7 @@ import Signup from './pages/authorization/Signup';
 import CategoryDetail from './pages/category/CategoryDetail';
 import CategoryForm from './pages/category/CategoryForm';
 import CategoryList from './pages/category/CategoryList';
+import Dashboard from './pages/Dashboard';
 import TaskList from './pages/task/TaskList';
 import TaskOfferDetail from './pages/task/TaskOfferDetail';
 import TaskOfferForm from './pages/task/TaskOfferForm';
@@ -49,6 +50,8 @@ function App() {
             <Route path="/users/:userId" element={<UserDetail />} exact />
             <Route path="/users/edit/:id" element={<UserForm />} exact />
             <Route path="/tasks/image/:taskId/:index" element={<FullscreenImageViewer />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="" element={<Dashboard />} />
           </Routes>
         </ContentBox>
         <Footer />

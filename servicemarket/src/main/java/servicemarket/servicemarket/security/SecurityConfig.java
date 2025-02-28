@@ -56,6 +56,7 @@ public class SecurityConfig {
                                 "http://localhost:80",
                                 "http://localhost:3000",
                                 "http://frontend-service:80",
+                                "http://frontendservice:30000",
                                 "http://localhost:8085",
                                 "http://user-service:8085"));
                 configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));

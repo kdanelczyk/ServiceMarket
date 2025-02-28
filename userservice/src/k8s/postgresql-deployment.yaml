@@ -14,7 +14,14 @@ spec:
     spec:
       containers:
         - name: postgresql
-          image: gcr.io/acoustic-atom-452113-j8/postgres:v1
+          image: gcr.io/acoustic-atom-452113-j8/postgresql:v1
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "1"
+              memory: "2Gi"
           imagePullPolicy: Always
           env:
             - name: POSTGRES_USER

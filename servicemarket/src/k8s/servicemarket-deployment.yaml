@@ -1,20 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: service-market
+  name: servicemarket
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: service-market
+      app: servicemarket
   template:
     metadata:
       labels:
-        app: service-market
+        app: servicemarket
     spec:
       containers:
-        - name: service-market
+        - name: servicemarket
           image:  gcr.io/acoustic-atom-452113-j8/servicemarket:v1
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "1"
+              memory: "2Gi"
           imagePullPolicy: Always
           env:
             - name: SPRING_RABBITMQ_HOST
@@ -25,11 +32,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-market
+  name: servicemarket
 spec:
   type: ClusterIP
   ports:
     - port: 8080
       targetPort: 8080
   selector:
-    app: service-market
+    app: servicemarket

@@ -28,7 +28,8 @@ import servicemarket.servicemarket.service.TaskService;
 
 @RestController
 @RequestMapping("/tasks")
-@CrossOrigin(origins = { "http://localhost:80", "http://frontend-service:80", "http://localhost:3000", })
+@CrossOrigin(origins = { "http://localhost:80", "http://frontendservice:80", "http://localhost:3000",
+        "http://frontendservice:30000" })
 public class TaskController {
 
     @Autowired

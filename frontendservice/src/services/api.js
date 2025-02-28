@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const isDocker = window.location.hostname !== 'localhost';
-const API_URL_MARKET = isDocker ? 'http://service-market:8080' : 'http://localhost:8080';
-const API_URL_USER = isDocker ? 'http://user-service:8085' : 'http://localhost:8085';
+const API_URL_MARKET = isDocker ? 'http://servicemarket:8080' : 'http://localhost:8080';
+const API_URL_USER = isDocker ? 'http://userservice:8085' : 'http://localhost:8085';
 
 // Category API calls
 export const getCategories = (page, size) =>
