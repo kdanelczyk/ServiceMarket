@@ -167,6 +167,17 @@ This will:
 - Connect all services in a shared network
 
 ## Deployment in Kubernetes (GKE)
+Let's create a cluster that will have sufficient computing power for our microservices:
+```bash
+gcloud container clusters create servicemarket-k8s-cluster \
+  --zone us-central1-a \
+  --num-nodes 2 \
+  --machine-type n2-standard-4 \
+  --enable-autoscaling \
+  --min-nodes 1 \
+  --max-nodes 3 \
+  --enable-stackdriver-kubernetes
+```
 
 The project includes **Kubernetes deployment configurations** in the `kubernetes/` directory. These configurations ensure scalable and manageable deployment in a Kubernetes cluster.
 
@@ -194,6 +205,8 @@ Example deployment command for `ServiceMarket`:
 ```bash
 kubectl apply -f {service name}-deployment.yaml
 ```
+After the correct process, all pods should function properly:
+![8](https://github.com/user-attachments/assets/a4028040-9c25-46c7-a10d-de33ea93186f)
 
 ## Conclusion
 
